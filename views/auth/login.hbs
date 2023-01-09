@@ -1,9 +1,19 @@
-<h1>Login page</h1>
 
-<form action="/auth/login" method="post">
-<input type="username" name="username" placeholder="Enter your username">
-<input type="password" name="password" placeholder="Enter your password">
-<button>Login</button>
+
+<h1>Login Page</h1>
+
+<form action="/auth/login" method="POST">
+
+    <label> Username
+      <input type="text" name="username" placeholder="Enter username" />
+    </label>
+
+    <label>Password
+      <input type="password" name="password" placeholder="********" />
+    </label>
+
+    <button type="submit">Login</button>
+
     {{#if errorMessage}}
       <p class="error">{{errorMessage}}</p>
     {{/if}}

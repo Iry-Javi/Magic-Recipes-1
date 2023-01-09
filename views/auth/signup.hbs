@@ -1,3 +1,4 @@
+
   <h2>Signup</h2>
   <form action="/auth/signup" method="POST">
       <input type="text" name="username" placeholder="Username" required/>
@@ -8,5 +9,6 @@
   </form>
 
   {{#if errorMessage}}
+
     <p class="error">{{errorMessage}}</p>
   {{/if}}

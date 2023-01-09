@@ -20,9 +20,11 @@ require("./config")(app);
 
 // default value for title local
 const capitalize = require("./utils/capitalize");
-const projectName = "Magic-Recipe"; // AQUI VERIFICAR
 
-app.locals.appTitle = `${capitalize(projectName)} `;
+const projectName = "Magic-Recipes";
+
+app.locals.appTitle = `${capitalize(projectName)}`;
+
 
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");
