@@ -66,9 +66,11 @@ router.post("/login", (req, res ) => {
   .catch(error => console.log(error));
 })
 
-router.get("/profile", (req, res) => {
+router.get("/profile", async (req, res) => {
   console.log(req.session.currentUser)
-  res.render("auth/profile", {user: req.session.currentUser})
+  const user = await User.findById(req.session.currentUser._id).populate("recipes")
+
+  res.render("auth/profile", {user})
 })
 
 router.post('/logout', (req, res) => {
@@ -77,5 +79,7 @@ router.post('/logout', (req, res) => {
     res.redirect('/');
   });
 });
+
+
 
 module.exports = router;
