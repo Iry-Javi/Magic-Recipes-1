@@ -24,14 +24,25 @@
 <p>{{owner.username}}</p>
 
 
+
 {{!-- <a href="/recipes/{{id}}/edit"><button>Edit Recipe</button></a>
 <form action="/recipes/{{id}}/delete" method="post">
 <button type="submit">Delete Recipe</button>
 </form> --}}
 
-<a href="/recipes/{{_id}}/comment"><button>Write a comment</button></a>
 
-{{#each comment}}
-<p>{{this}}</p>
+{{!-- <a href="/recipes/{{_id}}/comment"><button>Write a comment</button></a> --}}
+<h1>Write comment for {{name}}</h1>
+
+<form action="/recipes/{{_id}}/comment" method="post">
+    <input type="text" name="comment" placeholder="Write your comment" required>
+
+
+    <button type="submit">Send Comment</button>
+</form>
+<h4>Comments:</h4>
+{{#each this.comments}}
+
+<p>{{comment}}</p> 
 {{/each}}
 {{/each}}

@@ -12,23 +12,25 @@ const { isNotOwner } = require('../middleware/index');
 const { Error } = require('mongoose');
 
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
   const  {cousine} = req.query
   if(cousine !== undefined) {
     console.log(req.query)
-    Recipe.find({cousine})
+    Recipe.find({cousine}).populate("comments")
     .then(recipes => {
       console.log(recipes.length)
       res.render('recipes/list', {recipes, user:req.session.currentUser})})
     .catch(err => console.log(err))
   }
   else{
-    Recipe.find()
+    
+    Recipe.find().populate("comments")
     .then(recipes => {
       console.log(recipes.length)
-      res.render('recipes/list', {recipes, user:req.session.currentUser})})
+       res.render('recipes/list', {recipes, user:req.session.currentUser})})
     .catch(err => console.log(err))
   }
+
 });
   
 
