@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const fileUploader = require("../config/cloudinary")
 
 const {isLoggedIn} = require("../middleware/index")
 
@@ -9,6 +9,8 @@ const User = require('../models/User.model');
 const Comment = require('../models/Comment.model')
 const { isOwner } = require('../middleware/index');
 const { isNotOwner } = require('../middleware/index');
+const { Error } = require('mongoose');
+
 
 router.get('/', (req, res, next) => {
   const  {cousine} = req.query
@@ -29,32 +31,34 @@ router.get('/', (req, res, next) => {
   }
 });
   
-  
-  
-
 
 router.get('/create', isLoggedIn, (req, res, next) => {
     console.log("when you click on create recipe", req.session.currentUser)
     res.render('recipes/create-form')
 })
 
-router.post('/create', async (req, res, next) => {
-    const {cousine, title, imageUrl, duration, ingredients, preparation} = req.body;
-  try{
-    const user = await User.findById(req.session.currentUser._id)// finding the user at our database
-    const recipe = await Recipe.create({cousine, title, imageUrl, duration, ingredients, preparation, owner:req.session.currentUser._id})//create the Recipe at our database
-    user.recipes.push(recipe) // putting the recipe inside the user.recipes array
-    await user.save() //save user
 
-    res.redirect("/recipes")
-
-  }
-  catch(err){
-    console.log(err)
-  }
-    
-
-
+// tut probuyu 41
+router.post('/create', fileUploader.single("imageUrl"),  (req, res, next) => { //async
+    const {cousine, title, duration, ingredients, preparation} = req.body;
+    console.log(req.file.path)
+  // try{
+  //   const user = await User.findById(req.session.currentUser._id)
+  //   const recipe = await Recipe.create({cousine, title, imageUrl: req.file.path, duration, ingredients, preparation, owner:req.session.currentUser._id})
+  //   user.recipes.push(recipe) 
+  //   await user.save() 
+  //   /// tut
+    User.findById(req.session.currentUser._id)
+    .then(()=>{
+      Recipe.create({cousine, title, imageUrl: req.file.path, duration, ingredients, preparation, owner:req.session.currentUser._id})
+      .then(() => res.redirect("/recipes"))
+      .catch((err) => console.log(err))
+    // Recipe.create({ cousine, title, imageUrl: path, duration, ingredients, preparation })
+    // .then(() => res.redirect("/recipes"))
+    // res.redirect("/recipes")
+  })
+  .catch((err) => console.log(err))
+})
  /*    Recipe.create({
         title,
         preparation,
@@ -65,7 +69,7 @@ router.post('/create', async (req, res, next) => {
     .then(() => res.redirect('/recipes') )
 
     .catch(err => console.log(err)) */
-})
+
 
 router.get('/:id/edit', async (req, res, next) => {
     console.log("req.params",req.params)
@@ -81,11 +85,19 @@ router.get('/:id/edit', async (req, res, next) => {
     }
    
   });
-  
-  router.post('/:id/edit', async (req, res, next) => {
-    const { cousine, title, imageUrl, duration, ingredients, preparation } = req.body;
+  // tut 84, 86, 88, 90-96
+  router.post('/:id/edit', fileUploader.single("imageUrl"), async (req, res, next) => {
+    const { cousine, title, existingImage, duration, ingredients, preparation } = req.body;
     const { id } = req.params;
+    const { path } = req.file;
   
+    let imageUrl;
+    if (req.file) {
+      imageUrl = path;
+    } else {
+      imageUrl = existingImage;
+    }
+console.log(imageUrl)
     const theRecipe = await Recipe.findById(id)
     if(theRecipe.owner.toString() === req.session.currentUser._id){
         Recipe.findByIdAndUpdate(id, {cousine, title, imageUrl, duration, ingredients, preparation })
