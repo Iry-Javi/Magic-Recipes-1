@@ -1,9 +1,10 @@
+require("dotenv/config")
 const mongoose = require("mongoose");
 const Recipe = require("../models/Recipe.model"); 
 const recipes = [
-    { cousine: "italian", 
+    { cuisine: "italian", 
      title: 'Spaghetti Genovese', 
-     imageUrl: 'https://img.taste.com.au/tyTSqefm/w720-h480-cfill-q80/taste/2016/11/spaghetti-alla-genovese-11777-1.jpeg', 
+     imageUrl: 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/recipe-image-legacy-id-1845_10-e6b81e8.jpg?quality=90&resize=440,400', 
      duration: 25 , 
      ingredients: ['300g potato', '300g spaguetti', '200g trimmed green bean', '120g tub fresh pesto', 'olive oil'], 
      preparation: `step 1
@@ -16,9 +17,9 @@ const recipes = [
      comments: []
     },
 
-    { cousine: "slavic", 
+    { cuisine: "slavic", 
      title: ' Borscht ', 
-     imageUrl: 'https://static.wixstatic.com/media/293fdb_5c7fdd317f334787bc552e1e380abd58~mv2.jpg', 
+     imageUrl: 'https://bigoven-res.cloudinary.com/image/upload/w_300,c_fill,h_250/russian-borscht-f862ef.png', 
      duration: 65, 
      ingredients: `1 package pork sausage', '3 beets', ' 3 carrots', '3 potatoes', 'half head cabbage', '1 cup diced tomatoes', '1 table spoon vegetable oil', '1 onion', '1 can tomato paste', '8 3/4 cups water', '3 cloves garlic', '1 teaspoon white sugar', 'salt and pepper', 'half cup sour cream', '1 tablespoon chopped fresh parsley`, 
 
@@ -33,9 +34,9 @@ const recipes = [
      comments: []
     },
 
-    { cousine: "mediterranian", 
+    { cuisine: "mediterranian", 
      title: 'Paella', 
-     imageUrl: 'https://www.thespruceeats.com/thmb/rWeSaLTQeF1NJePa_HP5Tabf3jo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/fresh-paella-in-pan-on-wooden-table-556668991-5843564b5f9b5851e5745d5a.jpg', 
+     imageUrl: 'https://madridfree.org/wp-content/uploads/2017/10/arroz-daniela-web-300x250.jpg', 
      duration: 55, 
      ingredients: `' 2 tablespoons olive oil', '1 onion finely diced', 
      '½ tomato, finely diced'
@@ -63,9 +64,9 @@ const recipes = [
 
     },
 
-    { cousine: "asian", 
+    { cuisine: "asian", 
      title: ' Miso Soup ', 
-     imageUrl: 'https://files.selecthealth.cloud/api/public/content/221392-Miso_soup_blog_lg.jpg', 
+     imageUrl: 'https://theviewfromgreatisland.com/wp-content/uploads/2015/12/miso-alphabet-soup-7519-December-28-2015-250x250.jpg', 
      duration: 15, 
      ingredients: `· Water: This easy miso soup recipe starts with four cups of water.
      · Dashi granules and miso paste: Dashi granules and miso paste give the soup a bold, savory flavor base.
@@ -81,9 +82,9 @@ const recipes = [
      comments: []
     },
 
-    { cousine: "latin american", 
+    { cuisine: "latinamerican", 
      title: ' Chilean Empanadas with Beef ', 
-     imageUrl: 'https://files.selecthealth.cloud/api/public/content/221392-Miso_soup_blog_lg.jpg', 
+     imageUrl: 'https://tastingchile.files.wordpress.com/2010/09/dsc06292-cronistas-empanadas.jpg', 
      duration: 120, 
      ingredients: `For the beef filling:
      2 tablespoons of oil
@@ -125,7 +126,7 @@ const recipes = [
 
 const MONGO_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/project2";
-
+console.log(MONGO_URI)
 mongoose
   .connect(MONGO_URI)
   .then(x => {
@@ -170,18 +171,16 @@ mongoose
 
 
 
-
-
 // const mongoose = require("mongoose");
 // const Recipe = require("../models/Recipe.model"); // the DroneModel will be used to create new drones in our DB
 
 // // the array of drone objects to be created
 // const recipes = [
-//   { cousine: "italian", title: 'Italian Pasta', imageUrl: 'public/images/italian-pasta.jpg', duration: '30', ingredients: ['salz', 'flour'], preparation: 'fhfhjgjhg', owner: {}, comments: []},
+//   { cuisine: "italian", title: 'Italian Pasta', imageUrl: 'public/images/italian-pasta.jpg', duration: '30', ingredients: ['salz', 'flour'], preparation: 'fhfhjgjhg', owner: {}, comments: []},
   
-//   { cousine: "italian", title: 'Italian Pasta', imageUrl: 'public/images/italian-pasta.jpg', duration: '30', ingredients: ['salz', 'flour'], preparation: 'fhfhjgjhg', owner: {}, comments: []},
+//   { cuisine: "italian", title: 'Italian Pasta', imageUrl: 'public/images/italian-pasta.jpg', duration: '30', ingredients: ['salz', 'flour'], preparation: 'fhfhjgjhg', owner: {}, comments: []},
 
-//   { cousine: "italian", title: 'Italian Pasta', imageUrl: 'public/images/italian-pasta.jpg', duration: '30', ingredients: ['salz', 'flour'], preparation: 'fhfhjgjhg', owner: {}, comments: []}
+//   { cuisine: "italian", title: 'Italian Pasta', imageUrl: 'public/images/italian-pasta.jpg', duration: '30', ingredients: ['salz', 'flour'], preparation: 'fhfhjgjhg', owner: {}, comments: []}
 
 // ];
 

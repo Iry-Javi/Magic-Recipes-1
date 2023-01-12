@@ -13,17 +13,16 @@ const { Error } = require('mongoose');
 
 
 router.get('/', async (req, res, next) => {
-  const  {cousine} = req.query
-  if(cousine !== undefined) {
+  const  {cuisine} = req.query
+  if(cuisine !== undefined) {
     console.log(req.query)
-    Recipe.find({cousine}).populate("comments")
+    Recipe.find({cuisine}).populate("comments")
     .then(recipes => {
       console.log(recipes.length)
       res.render('recipes/list', {recipes, user:req.session.currentUser})})
     .catch(err => console.log(err))
   }
   else{
-    
     Recipe.find().populate("comments")
     .then(recipes => {
       console.log(recipes.length)
@@ -40,37 +39,22 @@ router.get('/create', isLoggedIn, (req, res, next) => {
 })
 
 
-// tut probuyu 41
 router.post('/create', fileUploader.single("imageUrl"),  (req, res, next) => { //async
-    const {cousine, title, duration, ingredients, preparation} = req.body;
+    const {cuisine, title, duration, ingredients, preparation} = req.body;
     console.log(req.file.path)
-  // try{
-  //   const user = await User.findById(req.session.currentUser._id)
-  //   const recipe = await Recipe.create({cousine, title, imageUrl: req.file.path, duration, ingredients, preparation, owner:req.session.currentUser._id})
-  //   user.recipes.push(recipe) 
-  //   await user.save() 
-  //   /// tut
-    User.findById(req.session.currentUser._id)
-    .then(()=>{
-      Recipe.create({cousine, title, imageUrl: req.file.path, duration, ingredients, preparation, owner:req.session.currentUser._id})
-      .then(() => res.redirect("/recipes"))
-      .catch((err) => console.log(err))
-    // Recipe.create({ cousine, title, imageUrl: path, duration, ingredients, preparation })
-    // .then(() => res.redirect("/recipes"))
-    // res.redirect("/recipes")
-  })
-  .catch((err) => console.log(err))
-})
- /*    Recipe.create({
-        title,
-        preparation,
-        imageUrl,
-        owner: req.session.currentUser._id
-    })
-    .then((recipe) => user.recipes.push(recipe)  )
-    .then(() => res.redirect('/recipes') )
 
-    .catch(err => console.log(err)) */
+    User.findById(req.session.currentUser._id)
+    .then((user)=>{
+      Recipe.create({cuisine, title, imageUrl: req.file.path, duration, ingredients, preparation, owner:req.session.currentUser._id})
+      .then((newRec) =>{
+        console.log('my new recipe', newRec._id)
+        user.recipes.push(newRec._id)
+        user.save()
+        res.redirect("/recipes")})
+      })
+      .catch((err) => console.log(err))
+
+  })
 
 
 router.get('/:id/edit', async (req, res, next) => {
@@ -87,9 +71,10 @@ router.get('/:id/edit', async (req, res, next) => {
     }
    
   });
-  // tut 84, 86, 88, 90-96
+
+
   router.post('/:id/edit', fileUploader.single("imageUrl"), async (req, res, next) => {
-    const { cousine, title, existingImage, duration, ingredients, preparation } = req.body;
+    const { cuisine, title, existingImage, duration, ingredients, preparation } = req.body;
     const { id } = req.params;
     const { path } = req.file;
   
@@ -102,18 +87,17 @@ router.get('/:id/edit', async (req, res, next) => {
 console.log(imageUrl)
     const theRecipe = await Recipe.findById(id)
     if(theRecipe.owner.toString() === req.session.currentUser._id){
-        Recipe.findByIdAndUpdate(id, {cousine, title, imageUrl, duration, ingredients, preparation })
+        Recipe.findByIdAndUpdate(id, {cuisine, title, imageUrl, duration, ingredients, preparation })
         .then(() => res.redirect('/recipes'))
         .catch(err => console.log(err))
       } 
     
   });
   
+
   router.post('/:id/delete', async (req, res, next) => {
     const { id } = req.params;
-  
     const theRecipe = await Recipe.findById(id)
-    
     if(theRecipe.owner.toString() === req.session.currentUser._id){
       Recipe.findByIdAndDelete(id)
       .then(() => res.redirect('/recipes'))
@@ -124,8 +108,6 @@ console.log(imageUrl)
   
   });
   
-
-  //////////////////////////////////////////////////
 
 router.get('/:id/comment', isLoggedIn, isNotOwner, (req, res, next) => {
 
