@@ -1,9 +1,8 @@
 const { Schema, model, SchemaTypes } = require("mongoose");
 
-// TODO: Please make sure you edit the User model to whatever makes sense in this case
 const recipeSchema = new Schema(
   {
-    cousine: {
+    cuisine: {
       type: String,
       required: true,
       enum: ['latinamerican', 'mediterranian', 'asian', 'italian', 'slavic']
@@ -36,7 +35,7 @@ const recipeSchema = new Schema(
     [{ type: Schema.Types.ObjectId, ref: "Comment" }]
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`    
+      
     timestamps: true
   }
 );
